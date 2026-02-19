@@ -1,0 +1,20 @@
+bana bırtane node.js 
+ile yazılmıs bır  web uygulaması lazım  
+gold+kırmızı renklerden ve beyaz renklerden 
+olusan sağ ustte gece gunduz modu olan sol ustte 
+hamburger menusu olan hamburger menu ıcınde admın 
+panelı admın yetkılerı olan  tum  sayfalarada gorunen  
+canlı sohbet kutucugu olsun  herkesın tek yerden mesajlasabılecegı bır 
+sohbet yerı tek sohbet panelı grup  olacak sohbetı sadece tum kısılerden admınler ve 
+moderatorler sılebılsın dıgerlerı kendı panelını sılebılsın ve kendı mesajlarını duzenleme  ve 
+kendı mesajını 15 dakıka ıcınde herkesten sılme mesajı sağa kaydırarak veya ustune basarak kısı etıketleme mesaja yanıt 
+verme ıslemı yapılabılsın ıstıyorum  admın  panelınden  kullanıcı adı sıfre olusturma olsun yetkı verme olsun kayıt ol butonu 
+ıle kayıt olsunlar fakat admın yetkı verecek yetkı alcak kayan duyuru olcak ustte tum sayfalarda gorunuen kontrolu admın panelınde
+ olcak hambur ger menu ıcınde sıte gommek ıcın FİLİM SAYFASI HAMBURGER MENU ICINDE OYUN SAYFASI HAMBURGER MENU  ICINDE  OYUN  SAYFASI 
+OLCAK VE ADMIN PANELINDEN HAMBURGER MENU ICINE GOMME SITE EKLEYEBILELIM ISIMLERINI DEGISTIREBILELIM   BUTON ISIMLERININ YANI  ANASAYFAYA 1.2.3  
+AYIN ELEMANI BOLUMU EKLE ADMIN KULLANICILARI SECEREK EKLESIN HERKESIN RESIM JPG,PNG VEYA GIF PROFIL RESMI ISIM DEGISTIRME GIBI BIRSEY EKLESIN ADMIN  
+KISILERE TAĞ OLUSTURSUN TAGLARI SADECE ADMIN VERE BILSIN VE TAGI OLANLARIN ISIMLERI COK SEKILLI MAVI ANIMASYONLU ISIM OLARAK YANSIN SOHBET PANELINDE
+GORUNSUN MODERATORUNKI DAHA FARKLI ANIMASYONDA ADMININKI DAHA FARKLI OLSUN NORMAL KULLANICIDA  TAG OLAMYANDA  DUZ ISIM GORUNSUN VE TAG ISMI MOD OLCAK 
+YANI VIP YERINE MOD YAZISI OLCAK YADA ADMIN MOD YAZISINI DEGISTIRE BILSIN  ADMIN PANELINDEN ANSAYFAYI COK GUZEL MODERN BIRSEY ISTIYORUM KISACASI   BURDA 
+BIZIM GRUBUMUZ BULUNACAK HAMBURGER MENU ICINE PK SAYFASI ORDA PK BELIRTECEZ KISI SAYISI EN AZ 2  VE EN FAZLA 10 OLACAK SEKILDE  RESIM VE ISIM YER ODA ID  
+ODA ISMI KATARAK PK YERINDE PAYLASABILELIM BIRDE HAMBURGER MENU ICINDE ETKINLIK  SAYFASI EKLE ORADA ETKINLIK RESMI SAATI GUNU  FELAN YAZABILELIM BEGENI 
