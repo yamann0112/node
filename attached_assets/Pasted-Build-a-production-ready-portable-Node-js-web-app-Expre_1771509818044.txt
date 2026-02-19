@@ -1,0 +1,174 @@
+Build a production-ready, portable Node.js web app (Express + EJS + SQLite + Socket.IO) with a premium modern UI.
+
+PORTABILITY (MUST):
+- Must run on any Node.js hosting (Render/Railway/VPS/cPanel node) with:
+  - npm install
+  - npm start
+- Use process.env.PORT (no hardcoded port)
+- No Replit-specific paths or features
+- No build step
+- No React / Vite / TypeScript
+- Only plain JS, Express, EJS, Socket.IO, SQLite
+
+TECH:
+- express
+- ejs
+- sqlite3
+- socket.io
+- express-session
+- bcrypt
+- multer (for profile images, jpg/png/gif)
+- sanitize/escape output against XSS (no raw HTML rendering from users)
+
+DESIGN (MUST BE PREMIUM):
+Theme: luxury gaming community
+- Background: #0b0b0f
+- Gold: #d4af37
+- Red: #8b0000
+- White: #f5f5f5
+- Glassmorphism panels (blur)
+- Soft shadows, modern rounded corners
+- Smooth animations & hover effects
+- Sticky top bar with announcement marquee
+- Top right: dark/light toggle switch (persist localStorage)
+- Top left: hamburger menu (slide-in)
+- Responsive mobile-first layout
+- Use Google Font: "Inter" or "Poppins"
+
+PAGES & NAV:
+- Home (modern hero, sections)
+- Chat (global group chat)
+- Films (embedded links/cards)
+- Games (embedded links/cards)
+- PK (room postings)
+- Events (event cards + likes)
+- Login / Register
+- Profile
+- Admin panel:
+  - Dashboard
+  - Users (create user, assign role)
+  - Roles/Tags (create tags and assign)
+  - Announcement (edit the global marquee text)
+  - Menu Manager (manage hamburger menu items + embedded sites)
+  - "Employee of the Month" (top 1/2/3 on homepage)
+  - Content manager: Films/Games links, PK posts, Events
+
+ROLES:
+- user
+- moderator
+- admin
+Rules:
+- Admin/mod can delete ANY chat message globally.
+- Normal user can:
+  - edit OWN message
+  - delete OWN message globally ONLY within 15 minutes
+  - delete for self anytime (optional: hide only for that user)
+- Admin controls who becomes admin/mod (users register as "user" by default)
+- Admin can remove role permissions too.
+
+CHAT FEATURES (IMPORTANT):
+Socket.IO global chat (single group room).
+Message features:
+- Send message
+- Reply to message (quote preview)
+- Mention @username (store mentions)
+- Edit own message (only within 15 minutes)
+- Delete:
+  - Owner: delete for everyone within 15 minutes
+  - Admin/mod: delete for everyone anytime
+- UI interactions:
+  - On message click / long press: action menu (Reply, Mention, Edit, Delete)
+  - Swipe right on mobile triggers Reply (simple pointer event)
+- Store messages in SQLite with timestamps.
+- Escape all user content to prevent XSS.
+- Rate limit: max 5 messages per 10 seconds per user/socket.
+
+DISPLAY NAME STYLING:
+- Admin name: special animation + gold glow border
+- Moderator name: different animation + red glow
+- Tagged users: BLUE animated name (VIP-style) and tag label displayed near name.
+- Normal users: plain white
+- Admin can rename the tag label "MOD/VIP/..." globally and per tag.
+
+PROFILE:
+- User can set display name
+- Upload profile image (jpg/png/gif) with size limit (e.g. 2MB)
+- Show avatar in chat messages
+
+ANNOUNCEMENT:
+- A top marquee that shows on ALL pages
+- Admin can edit text in admin panel
+
+HAMBURGER MENU MANAGER:
+- Admin can add/edit/remove menu items
+- Menu items can be:
+  - internal route
+  - embedded external site page (iframe)
+- Admin can rename buttons and re-order them
+
+PK PAGE:
+- Users can create "PK rooms"
+- Each PK room:
+  - room_id (auto)
+  - room_name
+  - max participants between 2 and 10
+  - participants: list of users with name + image
+  - created_at
+- Display as modern cards
+
+EVENTS PAGE:
+- Admin can create events:
+  - title
+  - image
+  - day/date
+  - time
+  - description
+- Users can like events (one like per user)
+- Show like count
+
+EMPLOYEE OF THE MONTH:
+- Admin selects 1st/2nd/3rd users
+- Shows on homepage as premium cards with avatar + name + badge
+
+DATABASE:
+Use SQLite file: app.db
+Create tables for:
+- users
+- tags
+- user_tags
+- settings (announcement text, tag label names, etc.)
+- menu_items
+- chat_messages
+- chat_mentions
+- pk_rooms
+- pk_room_participants
+- events
+- event_likes
+- employee_month (top3)
+Include migration/init logic on server start.
+
+SECURITY:
+- Password hashing with bcrypt
+- Session auth with express-session
+- Protected admin routes
+- Validate all inputs (lengths, file types)
+- Prevent SQL injection with prepared statements
+
+DELIVERABLES:
+1) Provide full folder structure
+2) Provide ALL source code files content:
+- index.js (main server)
+- /views/*.ejs (all)
+- /public/css/style.css
+- /public/js/main.js
+- any helper modules if used
+3) Provide npm scripts in package.json:
+- "start": "node index.js"
+4) Provide a README.md with:
+- setup steps
+- default admin credentials (create on first run if none exists)
+- how to deploy on Render/Railway
+5) Ensure app boots without errors and works in Replit preview.
+
+IMPORTANT:
+- Do NOT output pla...

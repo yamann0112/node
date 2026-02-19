@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+<div class="auth-container" style="max-width: 400px; margin: 100px auto; padding: 40px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; backdrop-filter: blur(10px);">
+    <h2 style="text-align: center; margin-bottom: 30px;">Login to <span class="gold">Luxe</span></h2>
+    <form action="/login" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; color: var(--gold);">Username</label>
+            <input type="text" name="username" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
+        </div>
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; color: var(--gold);">Password</label>
+            <input type="password" name="password" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
+        </div>
+        <button type="submit" class="glass-btn" style="width: 100%; padding: 15px; font-weight: bold; background: var(--gold); color: black;">ENTER THE ARENA</button>
+    </form>
+    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">New here? <a href="/register" class="gold">Create an account</a></p>
+</div>
+<%- include('partials/footer') %>

@@ -1,0 +1,133 @@
+:root {
+    --bg: #0b0b0f;
+    --gold: #d4af37;
+    --red: #8b0000;
+    --white: #f5f5f5;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+.announcement-bar {
+    background: var(--red);
+    color: var(--gold);
+    padding: 5px 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--gold);
+}
+
+.top-bar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background: rgba(11, 11, 15, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.gold { color: var(--gold); }
+
+.glass-btn {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--white);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.glass-btn:hover { background: rgba(255,255,255,0.1); }
+
+.hero {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(circle at center, #1a1a2e 0%, #0b0b0f 100%);
+}
+
+.hero h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.side-menu {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: rgba(11, 11, 15, 0.95);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 80px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-right: 1px solid var(--gold);
+}
+
+.side-menu.active { left: 0; }
+
+.side-menu a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.side-menu a:hover {
+    background: var(--glass);
+    color: var(--gold);
+    padding-left: 20px;
+}
+
+.glass-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.light-theme {
+    --bg: #f5f5f5;
+    --white: #0b0b0f;
+    --glass: rgba(0, 0, 0, 0.05);
+    --glass-border: rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .top-bar {
+    background: rgba(245, 245, 245, 0.8);
+}
+
+.light-theme .side-menu {
+    background: rgba(245, 245, 245, 0.95);
+    color: #0b0b0f;
+}
+
+.light-theme .side-menu a {
+    color: #0b0b0f;
+}
+

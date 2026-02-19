@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Gaming</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="announcement-bar">
+        <marquee><%= announcement %></marquee>
+    </div>
+    
+    <nav class="top-bar">
+        <div class="nav-left">
+            <button id="menu-toggle" class="glass-btn">☰</button>
+            <span class="logo">LUXE <span class="gold">GAMING</span></span>
+        </div>
+        <div class="nav-right">
+            <% if (user) { %>
+                <span class="user-info"><%= user.username %></span>
+                <a href="/logout" class="btn-sm">Logout</a>
+            <% } else { %>
+                <a href="/login" class="btn-sm">Login</a>
+            <% } %>
+            <button id="theme-toggle" class="glass-btn">◑</button>
+        </div>
+    </nav>
+
+    <main>
+        <%- body %>
+    </main>
+
+    <div id="side-menu" class="side-menu">
+        <a href="/">Home</a>
+        <a href="/chat">Global Chat</a>
+        <a href="/films">Films</a>
+        <a href="/games">Games</a>
+        <a href="/pk">PK Rooms</a>
+        <a href="/events">Events</a>
+        <% if (user && user.role === 'admin') { %>
+            <hr>
+            <a href="/admin">Admin Panel</a>
+        <% } %>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
