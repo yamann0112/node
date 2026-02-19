@@ -1,37 +1,42 @@
 <%- include('../partials/header') %>
 
 <div class="admin-container" style="padding: 20px 5%; max-width: 1200px; margin: 0 auto;">
-    <h1 class="gold">Kullanıcı Yönetimi</h1>
-    <a href="/admin" class="gold">← Geri</a>
-    
-    <table style="width: 100%; margin-top: 20px; border-collapse: collapse; background: var(--glass);">
-        <thead>
-            <tr style="border-bottom: 1px solid var(--gold); text-align: left;">
-                <th style="padding: 15px;">Kullanıcı Adı</th>
-                <th style="padding: 15px;">Rol</th>
-                <th style="padding: 15px;">İşlem</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% users.forEach(u => { %>
-                <tr style="border-bottom: 1px solid var(--glass-border);">
-                    <td style="padding: 15px;"><%= u.username %> (<%= u.display_name %>)</td>
-                    <td style="padding: 15px;"><%= u.role %></td>
-                    <td style="padding: 15px;">
-                        <form action="/admin/users/role" method="POST" style="display: flex; gap: 5px;">
-                            <input type="hidden" name="userId" value="<%= u.id %>">
-                            <select name="role" class="glass-btn" style="padding: 5px;">
-                                <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>User</option>
-                                <option value="moderator" <%= u.role === 'moderator' ? 'selected' : '' %>>Moderator</option>
-                                <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Admin</option>
-                            </select>
-                            <button type="submit" class="glass-btn" style="background: var(--gold); color: black;">Kaydet</button>
-                        </form>
-                    </td>
-                </tr>
-            <% }) %>
-        </tbody>
-    </table>
+  <h1 class="gold">Kullanıcı Yönetimi</h1>
+  <a href="/admin" class="gold" style="display:inline-block; margin-top:10px;">← Geri</a>
+
+  <table style="width: 100%; margin-top: 20px; border-collapse: collapse; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; overflow:hidden;">
+    <thead>
+      <tr style="border-bottom: 1px solid var(--gold); text-align: left;">
+        <th style="padding: 15px;">Kullanıcı</th>
+        <th style="padding: 15px;">Rol</th>
+        <th style="padding: 15px;">İşlem</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (users || []).forEach(u => { %>
+        <tr style="border-bottom: 1px solid var(--glass-border);">
+          <td style="padding: 15px;">
+            <strong><%= u.username %></strong>
+            <span style="opacity:.8;">(<%= u.display_name || '-' %>)</span>
+          </td>
+          <td style="padding: 15px;"><%= u.role %></td>
+          <td style="padding: 15px;">
+            <form action="/admin/users/role" method="POST" style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <input type="hidden" name="userId" value="<%= u.id %>">
+              <select name="role" class="glass-btn" style="padding: 8px 10px;">
+                <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>User</option>
+                <option value="moderator" <%= u.role === 'moderator' ? 'selected' : '' %>>Moderator</option>
+                <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Admin</option>
+              </select>
+              <button type="submit" class="glass-btn" style="background: var(--gold); color: black; font-weight: bold;">
+                Kaydet
+              </button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
 </div>
 
 <%- include('../partials/footer') %>
