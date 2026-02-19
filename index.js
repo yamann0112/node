@@ -12,7 +12,7 @@ const io = new Server(server);
 const PORT = process.env.PORT || 5000;
 
 // ✅ Render/Prod için: DB yolu env'den gelsin (istersen aynı kalır)
-const DB_PATH = process.env.DB_PATH || './app.db';
+const DB_PATH = process.env.DB_PATH || '/tmp/app.db';
 const db = new sqlite3.Database(DB_PATH);
 
 // ✅ Güvenlik: Admin kullanıcı/şifre ve session secret ENV'den gelsin
