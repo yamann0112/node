@@ -1,17 +1,20 @@
 <%- include('partials/header') %>
 <div class="auth-container" style="max-width: 400px; margin: 100px auto; padding: 40px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; backdrop-filter: blur(10px);">
-    <h2 style="text-align: center; margin-bottom: 30px;">Login to <span class="gold">Luxe</span></h2>
-    <form action="/login" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+    <h2 style="text-align: center; margin-bottom: 30px;"><span class="gold">Luxe</span> Giriş</h2>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <p style="color: var(--red); text-align: center;">Hatalı kullanıcı adı veya şifre!</p>
+    <% } %>
+    <form action="/giris" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
         <div class="form-group">
-            <label style="display: block; margin-bottom: 8px; color: var(--gold);">Username</label>
+            <label style="display: block; margin-bottom: 8px; color: var(--gold);">Kullanıcı Adı</label>
             <input type="text" name="username" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
         </div>
         <div class="form-group">
-            <label style="display: block; margin-bottom: 8px; color: var(--gold);">Password</label>
+            <label style="display: block; margin-bottom: 8px; color: var(--gold);">Şifre</label>
             <input type="password" name="password" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
         </div>
-        <button type="submit" class="glass-btn" style="width: 100%; padding: 15px; font-weight: bold; background: var(--gold); color: black;">ENTER THE ARENA</button>
+        <button type="submit" class="glass-btn" style="width: 100%; padding: 15px; font-weight: bold; background: var(--gold); color: black;">GİRİŞ YAP</button>
     </form>
-    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">New here? <a href="/register" class="gold">Create an account</a></p>
+    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">Hesabınız yok mu? <a href="/kayit" class="gold">Kayıt Ol</a></p>
 </div>
 <%- include('partials/footer') %>

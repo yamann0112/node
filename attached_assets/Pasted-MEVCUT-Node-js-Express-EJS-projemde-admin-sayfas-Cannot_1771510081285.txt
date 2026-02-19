@@ -1,0 +1,68 @@
+MEVCUT Node.js + Express + EJS projemde /admin sayfası "Cannot GET /admin" veriyor. 
+ŞU İŞLERİ TAMAMLA (FREE PLAN uyumlu, ekstra ücretli özellik kullanma):
+
+1) ROUTE DÜZELTME
+- /admin route'u mutlaka çalışsın.
+- /admin giriş yapılmadıysa /giris sayfasına atsın.
+- /admin panelde: Kullanıcılar, Roller & Yetkiler, Duyuru, Menü Yönetimi, Ayın Elemanı, PK, Etkinlikler sekmeleri olsun.
+
+2) TAM TÜRKÇE
+- Sitenin TÜM metinleri Türkçe olsun (butonlar, menüler, hata mesajları).
+- Sayfa başlıkları: Ana Sayfa, Sohbet, Filmler, Oyunlar, PK, Etkinlikler, Giriş, Kayıt Ol, Admin Paneli.
+
+3) YETKİ SİSTEMİ (RBAC)
+- Roller: admin, moderator, user
+- Admin her şeyi yönetir.
+- Moderator: sohbet mesajı silebilir (tüm kullanıcıların mesajı), duyuruları görebilir.
+- User: sadece kendi mesajını silebilir/düzenleyebilir.
+- Kullanıcı rollerini admin panelinden değiştir.
+
+4) ADMİN PANEL ÖZELLİKLERİ
+- Kullanıcı oluşturma: kullanıcı adı + şifre + rol
+- Kayıt ol sayfası olsun ama admin panelinden "kayıtları onayla" veya "rol ver" mantığı olsun (default user).
+- Duyuru yönetimi: üstte kayan duyuru (marquee benzeri) tüm sayfalarda gözüksün, içerik admin panelinden değişsin.
+
+5) MENÜ YÖNETİMİ (SİTE GÖMME)
+- Admin panelinde “Gömülü Siteler” bölümü olsun:
+  - Buton adı (ör: Film Sitesi 1)
+  - URL
+  - Menüde görünsün/gizlensin
+  - Sıralama (1,2,3)
+- Menüde bu butona basınca yeni sayfada embedded (iframe) açılsın.
+- URL güvenliği için sadece http/https kabul et.
+
+6) MODERN TASARIM
+- Tema: gold + kırmızı + beyaz, modern (glassmorphism/kart tasarım), mobil uyumlu.
+- Sağ üstte gece/gündüz modu.
+- Sol üst hamburger menü.
+- Header ve footer modern olsun.
+
+7) CHAT (VARSA KORU / YOKSA EKLE)
+- Socket.IO ile tek global sohbet odası kalsın.
+- Mesajlarda: yanıtla, etiketle (@kullanici), beğeni.
+- Mesaj düzenleme: sadece kendi mesajı.
+- "15 dakika içinde herkesten sil" (kendi mesajı için).
+- Admin ve moderator istediği mesajı silebilsin.
+
+8) VERİTABANI
+- SQLite kullan. Tablo şemalarını net kur:
+  - users(id, username, password_hash, role, display_name, avatar_url, tag, created_at)
+  - announcements(id, text, is_active)
+  - menu_links(id, title, url, visible, sort_order)
+  - employee_of_month(id, user_id, month, rank)
+  - pk_rooms(id, room_name, room_id_text, created_by, created_at)
+  - pk_room_members(id, pk_room_id, user_id)
+  - events(id, title, image_url, day, time, description, created_at)
+  - messages(id, user_id, text, reply_to_id, likes, created_at, deleted_at)
+
+9) VAR OLAN DOSYALARA DOKUN
+- Projeyi tek dosyada bırakma; routes/, views/, public/ yapısını düzgün kullan.
+- "npm start" ile sorunsuz kalksın.
+- README.md içine Türkçe kullanım yaz: admin giriş bilgisi, varsayılan admin oluşturma.
+
+10) ÇIKTI
+- Bana güncellenen dosya ağacını yazdır.
+- Hangi route'lar var listesini çıkar.
+- Varsayılan admin oluştur: kullanıcı adı: admin şifre: admin123 (ilk açılışta otomatik oluştur).
+
+ÖNEMLİ: /admin kesin çalışacak. "Cannot GET /admin" bittiğinde dur.

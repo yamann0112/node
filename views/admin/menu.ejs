@@ -1,0 +1,39 @@
+<%- include('partials/header') %>
+<div class="admin-container" style="padding: 20px 5%; max-width: 1200px; margin: 0 auto;">
+    <h1 class="gold">Menü Yönetimi (Gömülü Siteler)</h1>
+    <a href="/admin" class="gold">← Geri</a>
+    
+    <div class="glass-card" style="padding: 20px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 15px; margin-top: 20px;">
+        <h3 class="gold">Yeni Site Ekle</h3>
+        <form action="/admin/menu" method="POST" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+            <input type="text" name="title" placeholder="Buton Adı (ör: Film Sitesi 1)" required style="padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
+            <input type="url" name="url" placeholder="URL (http/https)" required style="padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
+            <input type="number" name="sort_order" placeholder="Sıralama (1, 2, 3...)" value="0" style="padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
+            <button type="submit" class="glass-btn" style="background: var(--gold); color: black; font-weight: bold;">Ekle</button>
+        </form>
+    </div>
+
+    <table style="width: 100%; margin-top: 30px; border-collapse: collapse; background: var(--glass);">
+        <thead>
+            <tr style="border-bottom: 1px solid var(--gold); text-align: left;">
+                <th style="padding: 15px;">Başlık</th>
+                <th style="padding: 15px;">URL</th>
+                <th style="padding: 15px;">Sıra</th>
+                <th style="padding: 15px;">İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% links.forEach(link => { %>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 15px;"><%= link.title %></td>
+                    <td style="padding: 15px;"><%= link.url %></td>
+                    <td style="padding: 15px;"><%= link.sort_order %></td>
+                    <td style="padding: 15px;">
+                        <button class="glass-btn" style="color: var(--red);">Sil</button>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<%- include('partials/footer') %>

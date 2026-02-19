@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+<div class="admin-container" style="padding: 20px 5%; max-width: 1200px; margin: 0 auto;">
+    <h1 class="gold">Duyuru Yönetimi</h1>
+    <a href="/admin" class="gold">← Geri</a>
+    
+    <div class="glass-card" style="padding: 20px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 15px; margin-top: 20px;">
+        <h3 class="gold">Yeni Duyuru Yayınla</h3>
+        <form action="/admin/announcements" method="POST" style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+            <textarea name="text" placeholder="Duyuru metni..." required style="width: 100%; height: 80px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; color: white; padding: 10px;"></textarea>
+            <button class="glass-btn" style="background: var(--gold); color: black; font-weight: bold;">YAYINLA</button>
+        </form>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <% announcements.forEach(a => { %>
+            <div class="glass-card" style="padding: 15px; margin-bottom: 10px; background: <%= a.is_active ? 'rgba(212, 175, 55, 0.1)' : 'var(--glass)' %>; border: 1px solid var(--glass-border);">
+                <p><%= a.text %></p>
+                <small><%= a.is_active ? 'Aktif' : 'Pasif' %></small>
+            </div>
+        <% }) %>
+    </div>
+</div>
+<%- include('partials/footer') %>

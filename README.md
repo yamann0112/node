@@ -1,21 +1,29 @@
-# Luxury Gaming Community Platform
+# Lüks Oyun Topluluğu Platformu
 
-A portable, production-ready Node.js web app built with Express, EJS, SQLite, and Socket.IO.
+Bu proje, Express, EJS, SQLite ve Socket.IO kullanılarak geliştirilmiş modern bir topluluk platformudur.
 
-## Features
-- **Premium UI**: Luxury gold/dark theme with glassmorphism.
-- **Real-time Chat**: Socket.IO powered global chat with role-based styling.
-- **Auth System**: Secure login/register with bcrypt and session management.
-- **Admin Panel**: Manage global announcement marquee and community features.
-- **Portability**: Runs on any Node hosting with `npm install` and `npm start`.
+## Özellikler
+- **Tam Türkçe Arayüz**: Tüm menüler ve mesajlar Türkçedir.
+- **Admin Paneli**: `/admin` sayfası üzerinden kullanıcılar, roller, menüler ve duyurular yönetilebilir.
+- **Yetki Sistemi**: Admin, Moderator ve User rolleri (RBAC).
+- **Canlı Sohbet**: Socket.IO ile global sohbet odası, mesaj yanıtlama ve silme özellikleri.
+- **Menü Yönetimi**: Dış siteleri iframe olarak menüye ekleme imkanı.
+- **Modern Tasarım**: Glassmorphism, gece/gündüz modu ve mobil uyumluluk.
 
-## Setup
+## Kurulum
 1. `npm install`
 2. `npm start`
 
-## Default Admin Credentials
-- **Username**: `admin`
-- **Password**: `admin123`
+## Varsayılan Admin Bilgileri
+- **Kullanıcı Adı**: `admin`
+- **Şifre**: `admin123`
 
-## Deployment
-Compatible with Render, Railway, VPS, or any Node.js environment. Set `PORT` environment variable as needed.
+## Route Listesi
+- `/`: Ana Sayfa
+- `/giris`: Giriş Sayfası
+- `/kayit`: Kayıt Ol
+- `/chat`: Sohbet
+- `/admin`: Admin Paneli
+- `/admin/users`: Kullanıcı Yönetimi
+- `/admin/announcements`: Duyuru Yönetimi
+- `/admin/menu`: Menü Yönetimi

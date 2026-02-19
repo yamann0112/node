@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luxury Gaming</title>
+    <title>Lüks Oyun Topluluğu</title>
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="dark-theme">
     <div class="announcement-bar">
         <marquee><%= announcement %></marquee>
     </div>
@@ -19,25 +19,28 @@
         </div>
         <div class="nav-right">
             <% if (user) { %>
-                <span class="user-info" style="margin-right: 15px;"><%= user.username %></span>
-                <a href="/logout" class="glass-btn" style="text-decoration: none; font-size: 0.8rem;">Logout</a>
+                <span class="user-info" style="margin-right: 15px;"><%= user.display_name || user.username %></span>
+                <a href="/cikis" class="glass-btn" style="text-decoration: none; font-size: 0.8rem;">Çıkış Yap</a>
             <% } else { %>
-                <a href="/login" class="glass-btn" style="text-decoration: none; font-size: 0.8rem;">Login</a>
+                <a href="/giris" class="glass-btn" style="text-decoration: none; font-size: 0.8rem;">Giriş</a>
             <% } %>
             <button id="theme-toggle" class="glass-btn">◑</button>
         </div>
     </nav>
 
     <div id="side-menu" class="side-menu">
-        <a href="/">Home</a>
-        <a href="/chat">Global Chat</a>
-        <a href="/films">Films</a>
-        <a href="/games">Games</a>
-        <a href="/pk">PK Rooms</a>
-        <a href="/events">Events</a>
+        <a href="/">Ana Sayfa</a>
+        <a href="/chat">Sohbet</a>
+        <a href="/films">Filmler</a>
+        <a href="/games">Oyunlar</a>
+        <a href="/pk">PK Odaları</a>
+        <a href="/events">Etkinlikler</a>
+        <% menuLinks.forEach(link => { %>
+            <a href="<%= link.url %>" target="_blank"><%= link.title %></a>
+        <% }) %>
         <% if (user && user.role === 'admin') { %>
             <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 10px 0;">
-            <a href="/admin">Admin Panel</a>
+            <a href="/admin">Admin Paneli</a>
         <% } %>
     </div>
     <main>
