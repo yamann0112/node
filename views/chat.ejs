@@ -1,11 +1,14 @@
 <%- include('partials/header') %>
+
 <div class="chat-container" style="max-width: 800px; margin: 20px auto; height: 80vh; display: flex; flex-direction: column; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 15px; overflow: hidden;">
     <div class="chat-header" style="padding: 15px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.05);">
         <h3 class="gold">Global Group Chat</h3>
     </div>
+
     <div id="messages" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
         <!-- Messages will appear here -->
     </div>
+
     <div class="chat-input-area" style="padding: 20px; border-top: 1px solid var(--glass-border); background: rgba(0,0,0,0.2);">
         <form id="chat-form" style="display: flex; gap: 10px;">
             <input id="m" autocomplete="off" placeholder="Type your message..." style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
@@ -20,17 +23,20 @@
     const form = document.getElementById('chat-form');
     const input = document.getElementById('m');
     const messages = document.getElementById('messages');
-    
+
     const userId = <%= user.id %>;
     const username = "<%= user.username %>";
     const role = "<%= user.role %>";
+    const displayName = "<%= user.display_name || user.username %>";
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (input.value) {
-            socket.emit('chat message', { msg: input.value, userId, username, role });
-            input.value = '';
-        }
+        const text = (input.value || '').trim();
+        if (!text) return;
+
+        // ✅ Server ile aynı alan adları: text + displayName
+        socket.emit('chat message', { text, userId, username, role, displayName, replyToId: null });
+        input.value = '';
     });
 
     socket.on('chat message', (data) => {
@@ -38,8 +44,9 @@
         item.style.padding = '10px 15px';
         item.style.borderRadius = '10px';
         item.style.maxWidth = '70%';
-        
-        if (data.username === username) {
+
+        const mine = data.username === username;
+        if (mine) {
             item.style.alignSelf = 'flex-end';
             item.style.background = 'rgba(212, 175, 55, 0.1)';
             item.style.border = '1px solid var(--gold)';
@@ -48,14 +55,14 @@
             item.style.background = 'var(--glass)';
             item.style.border = '1px solid var(--glass-border)';
         }
-        
+
         const nameSpan = document.createElement('div');
-        nameSpan.className = data.role + '-name';
+        nameSpan.className = (data.role || 'user') + '-name';
         nameSpan.style.fontWeight = 'bold';
         nameSpan.style.marginBottom = '5px';
         nameSpan.style.fontSize = '0.8rem';
-        nameSpan.textContent = data.username;
-        
+        nameSpan.textContent = data.displayName || data.username || 'Kullanıcı';
+
         if (data.role === 'admin') {
             nameSpan.style.color = 'var(--gold)';
             nameSpan.style.textShadow = '0 0 5px var(--gold)';
@@ -64,7 +71,8 @@
         }
 
         const msgDiv = document.createElement('div');
-        msgDiv.textContent = data.msg;
+        // ✅ Mesaj alanı: text
+        msgDiv.textContent = data.text || '';
 
         item.appendChild(nameSpan);
         item.appendChild(msgDiv);
@@ -72,4 +80,5 @@
         messages.scrollTop = messages.scrollHeight;
     });
 </script>
+
 <%- include('partials/footer') %>
