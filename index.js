@@ -11,10 +11,17 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 5000;
 
-const db = new sqlite3.Database('./app.db');
+// ✅ Render/Prod için: DB yolu env'den gelsin (istersen aynı kalır)
+const DB_PATH = process.env.DB_PATH || './app.db';
+const db = new sqlite3.Database(DB_PATH);
+
+// ✅ Güvenlik: Admin kullanıcı/şifre ve session secret ENV'den gelsin
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.ADMIN_PASS || 'admin123';
+const SESSION_SECRET = process.env.SESSION_SECRET || 'luxe-secret-key';
 
 db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS users (
+  db.run(`CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE,
         password_hash TEXT,
@@ -25,13 +32,13 @@ db.serialize(() => {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS announcements (
+  db.run(`CREATE TABLE IF NOT EXISTS announcements (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         text TEXT,
         is_active INTEGER DEFAULT 1
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS menu_links (
+  db.run(`CREATE TABLE IF NOT EXISTS menu_links (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
         url TEXT,
@@ -39,7 +46,7 @@ db.serialize(() => {
         sort_order INTEGER DEFAULT 0
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS employee_of_month (
+  db.run(`CREATE TABLE IF NOT EXISTS employee_of_month (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         month TEXT,
@@ -47,7 +54,7 @@ db.serialize(() => {
         FOREIGN KEY(user_id) REFERENCES users(id)
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS pk_rooms (
+  db.run(`CREATE TABLE IF NOT EXISTS pk_rooms (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         room_name TEXT,
         room_id_text TEXT,
@@ -56,7 +63,7 @@ db.serialize(() => {
         FOREIGN KEY(created_by) REFERENCES users(id)
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS pk_room_members (
+  db.run(`CREATE TABLE IF NOT EXISTS pk_room_members (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         pk_room_id INTEGER,
         user_id INTEGER,
@@ -64,7 +71,7 @@ db.serialize(() => {
         FOREIGN KEY(user_id) REFERENCES users(id)
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS events (
+  db.run(`CREATE TABLE IF NOT EXISTS events (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
         image_url TEXT,
@@ -74,7 +81,7 @@ db.serialize(() => {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
-    db.run(`CREATE TABLE IF NOT EXISTS messages (
+  db.run(`CREATE TABLE IF NOT EXISTS messages (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         text TEXT,
@@ -85,58 +92,61 @@ db.serialize(() => {
         FOREIGN KEY(user_id) REFERENCES users(id)
     )`);
 
-    // Default admin
-    db.get("SELECT * FROM users WHERE username = 'admin'", (err, row) => {
-        if (!row) {
-            const hash = bcrypt.hashSync('admin123', 10);
-            db.run("INSERT INTO users (username, password_hash, display_name, role) VALUES (?, ?, ?, ?)", 
-                ['admin', hash, 'Yönetici', 'admin']);
-        }
-    });
+  // ✅ Default admin (ENV ile)
+  db.get("SELECT * FROM users WHERE username = ?", [ADMIN_USER], (err, row) => {
+    if (!row) {
+      const hash = bcrypt.hashSync(ADMIN_PASS, 10);
+      db.run(
+        "INSERT INTO users (username, password_hash, display_name, role) VALUES (?, ?, ?, ?)",
+        [ADMIN_USER, hash, 'Yönetici', 'admin']
+      );
+    }
+  });
 
-    db.get("SELECT * FROM announcements WHERE is_active = 1", (err, row) => {
-        if (!row) {
-            db.run("INSERT INTO announcements (text) VALUES (?)", ['Lüks Oyun Topluluğuna Hoş Geldiniz!']);
-        }
-    });
+  db.get("SELECT * FROM announcements WHERE is_active = 1", (err, row) => {
+    if (!row) {
+      db.run("INSERT INTO announcements (text) VALUES (?)", ['Lüks Oyun Topluluğuna Hoş Geldiniz!']);
+    }
+  });
 });
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+
 app.use(session({
-    secret: 'luxe-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
 }));
 
 // Global locals
 app.use((req, res, next) => {
-    db.get("SELECT text FROM announcements WHERE is_active = 1 ORDER BY id DESC LIMIT 1", (err, ann) => {
-        db.all("SELECT * FROM menu_links WHERE visible = 1 ORDER BY sort_order ASC", (err, links) => {
-            res.locals.announcement = ann ? ann.text : '';
-            res.locals.menuLinks = links || [];
-            res.locals.user = req.session.userId ? { 
-                id: req.session.userId, 
-                username: req.session.username, 
-                role: req.session.role,
-                display_name: req.session.displayName 
-            } : null;
-            next();
-        });
+  db.get("SELECT text FROM announcements WHERE is_active = 1 ORDER BY id DESC LIMIT 1", (err, ann) => {
+    db.all("SELECT * FROM menu_links WHERE visible = 1 ORDER BY sort_order ASC", (err, links) => {
+      res.locals.announcement = ann ? ann.text : '';
+      res.locals.menuLinks = links || [];
+      res.locals.user = req.session.userId ? {
+        id: req.session.userId,
+        username: req.session.username,
+        role: req.session.role,
+        display_name: req.session.displayName
+      } : null;
+      next();
     });
+  });
 });
 
 // Auth Middleware
 const requireAuth = (req, res, next) => {
-    if (req.session.userId) return next();
-    res.redirect('/giris');
+  if (req.session.userId) return next();
+  res.redirect('/giris');
 };
 
 const requireAdmin = (req, res, next) => {
-    if (req.session.role === 'admin') return next();
-    res.redirect('/giris');
+  if (req.session.role === 'admin') return next();
+  res.redirect('/giris');
 };
 
 // Routes
@@ -149,91 +159,99 @@ app.get('/events', requireAuth, (req, res) => res.render('events'));
 
 app.get('/giris', (req, res) => res.render('login', { error: req.query.error }));
 app.post('/giris', (req, res) => {
-    const { username, password } = req.body;
-    db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
-        if (user && bcrypt.compareSync(password, user.password_hash)) {
-            req.session.userId = user.id;
-            req.session.username = user.username;
-            req.session.role = user.role;
-            req.session.displayName = user.display_name;
-            return res.redirect('/');
-        }
-        res.redirect('/giris?error=1');
-    });
+  const { username, password } = req.body;
+  db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
+    if (user && bcrypt.compareSync(password, user.password_hash)) {
+      req.session.userId = user.id;
+      req.session.username = user.username;
+      req.session.role = user.role;
+      req.session.displayName = user.display_name;
+      return res.redirect('/');
+    }
+    res.redirect('/giris?error=1');
+  });
 });
 
 app.get('/kayit', (req, res) => res.render('register', { error: req.query.error }));
 app.post('/kayit', (req, res) => {
-    const { username, password, display_name } = req.body;
-    const hash = bcrypt.hashSync(password, 10);
-    db.run("INSERT INTO users (username, password_hash, display_name) VALUES (?, ?, ?)", 
-        [username, hash, display_name], (err) => {
-        if (err) return res.redirect('/kayit?error=1');
-        res.redirect('/giris');
-    });
+  const { username, password, display_name } = req.body;
+  const hash = bcrypt.hashSync(password, 10);
+  db.run(
+    "INSERT INTO users (username, password_hash, display_name) VALUES (?, ?, ?)",
+    [username, hash, display_name],
+    (err) => {
+      if (err) return res.redirect('/kayit?error=1');
+      res.redirect('/giris');
+    }
+  );
 });
 
 app.get('/cikis', (req, res) => {
-    req.session.destroy();
-    res.redirect('/giris');
+  req.session.destroy();
+  res.redirect('/giris');
 });
 
 // Admin
 app.get('/admin', requireAdmin, (req, res) => res.render('admin/dashboard'));
 app.get('/admin/users', requireAdmin, (req, res) => {
-    db.all("SELECT id, username, role, display_name FROM users", (err, users) => {
-        res.render('admin/users', { users });
-    });
+  db.all("SELECT id, username, role, display_name FROM users", (err, users) => {
+    res.render('admin/users', { users });
+  });
 });
 app.post('/admin/users/role', requireAdmin, (req, res) => {
-    const { userId, role } = req.body;
-    db.run("UPDATE users SET role = ? WHERE id = ?", [role, userId], () => res.redirect('/admin/users'));
+  const { userId, role } = req.body;
+  db.run("UPDATE users SET role = ? WHERE id = ?", [role, userId], () => res.redirect('/admin/users'));
 });
 
 app.get('/admin/announcements', requireAdmin, (req, res) => {
-    db.all("SELECT * FROM announcements", (err, announcements) => {
-        res.render('admin/announcements', { announcements });
-    });
+  db.all("SELECT * FROM announcements", (err, announcements) => {
+    res.render('admin/announcements', { announcements });
+  });
 });
 app.post('/admin/announcements', requireAdmin, (req, res) => {
-    const { text } = req.body;
-    db.run("INSERT INTO announcements (text) VALUES (?)", [text], () => res.redirect('/admin/announcements'));
+  const { text } = req.body;
+  db.run("INSERT INTO announcements (text) VALUES (?)", [text], () => res.redirect('/admin/announcements'));
 });
 
 app.get('/admin/menu', requireAdmin, (req, res) => {
-    db.all("SELECT * FROM menu_links ORDER BY sort_order ASC", (err, links) => {
-        res.render('admin/menu', { links });
-    });
+  db.all("SELECT * FROM menu_links ORDER BY sort_order ASC", (err, links) => {
+    res.render('admin/menu', { links });
+  });
 });
 app.post('/admin/menu', requireAdmin, (req, res) => {
-    const { title, url, sort_order } = req.body;
-    db.run("INSERT INTO menu_links (title, url, sort_order) VALUES (?, ?, ?)", 
-        [title, url, sort_order], () => res.redirect('/admin/menu'));
+  const { title, url, sort_order } = req.body;
+  db.run(
+    "INSERT INTO menu_links (title, url, sort_order) VALUES (?, ?, ?)",
+    [title, url, sort_order],
+    () => res.redirect('/admin/menu')
+  );
 });
 
 // Socket.io
 io.on('connection', (socket) => {
-    socket.on('chat message', (data) => {
-        db.run("INSERT INTO messages (user_id, text, reply_to_id) VALUES (?, ?, ?)", 
-            [data.userId, data.text, data.replyToId], function(err) {
-            io.emit('chat message', { 
-                id: this.lastID, 
-                text: data.text, 
-                username: data.username, 
-                role: data.role,
-                displayName: data.displayName
-            });
+  socket.on('chat message', (data) => {
+    db.run(
+      "INSERT INTO messages (user_id, text, reply_to_id) VALUES (?, ?, ?)",
+      [data.userId, data.text, data.replyToId],
+      function (err) {
+        io.emit('chat message', {
+          id: this.lastID,
+          text: data.text,
+          username: data.username,
+          role: data.role,
+          displayName: data.displayName
         });
+      }
+    );
+  });
+
+  socket.on('delete message', (data) => {
+    db.run("UPDATE messages SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?", [data.id], () => {
+      io.emit('message deleted', { id: data.id });
     });
-    
-    socket.on('delete message', (data) => {
-        // Logic for delete (admin/mod or owner < 15min)
-        db.run("UPDATE messages SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?", [data.id], () => {
-            io.emit('message deleted', { id: data.id });
-        });
-    });
+  });
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
