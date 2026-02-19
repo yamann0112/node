@@ -1,4 +1,5 @@
-<%- include('partials/header') %>
+<%- include('../partials/header') %>
+
 <div class="admin-container" style="padding: 20px 5%; max-width: 1200px; margin: 0 auto;">
     <h1 class="gold">Menü Yönetimi (Gömülü Siteler)</h1>
     <a href="/admin" class="gold">← Geri</a>
@@ -29,11 +30,15 @@
                     <td style="padding: 15px;"><%= link.url %></td>
                     <td style="padding: 15px;"><%= link.sort_order %></td>
                     <td style="padding: 15px;">
-                        <button class="glass-btn" style="color: var(--red);">Sil</button>
+                        <form action="/admin/menu/delete" method="POST">
+                            <input type="hidden" name="id" value="<%= link.id %>">
+                            <button type="submit" class="glass-btn" style="color: var(--red);">Sil</button>
+                        </form>
                     </td>
                 </tr>
             <% }) %>
         </tbody>
     </table>
 </div>
-<%- include('partials/footer') %>
+
+<%- include('../partials/footer') %>
